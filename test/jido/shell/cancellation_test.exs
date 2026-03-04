@@ -3,6 +3,7 @@ defmodule Jido.Shell.CancellationTest do
 
   alias Jido.Shell.ShellSession
   alias Jido.Shell.ShellSessionServer
+
   @event_timeout 1_000
 
   setup do
@@ -72,8 +73,7 @@ defmodule Jido.Shell.CancellationTest do
 
       {:ok, :cancelled} = ShellSessionServer.cancel(session_id)
       assert_receive {:jido_shell_session, _, :command_cancelled}, @event_timeout
-
-      Process.sleep(100)
+      wait_until_idle(session_id)
 
       {:ok, state} = ShellSessionServer.get_state(session_id)
       refute state.current_command

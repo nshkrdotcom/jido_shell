@@ -1,7 +1,7 @@
-defmodule Jido.Shell.SpriteLifecycleTest do
+defmodule Jido.Shell.Environment.SpriteTest do
   use ExUnit.Case, async: true
 
-  alias Jido.Shell.SpriteLifecycle
+  alias Jido.Shell.Environment.Sprite
 
   defmodule FakeSessionMod do
     def start_with_vfs(workspace_id, opts) do
@@ -92,7 +92,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     }
 
     assert {:ok, result} =
-             SpriteLifecycle.provision(
+             Sprite.provision(
                "workspace-1",
                sprite_config,
                session_mod: FakeSessionMod,
@@ -122,7 +122,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     Process.put(:sprite_agent_run_result, {:error, :mkdir_failed})
 
     assert {:error, :mkdir_failed} =
-             SpriteLifecycle.provision(
+             Sprite.provision(
                "workspace-2",
                %{token: "token-override", base_url: "   "},
                session_mod: FakeSessionMod,
@@ -145,7 +145,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     Process.put(:sprite_start_result, {:error, :session_failed})
 
     assert {:error, :session_failed} =
-             SpriteLifecycle.provision(
+             Sprite.provision(
                "workspace-3",
                %{token: "token"},
                session_mod: FakeSessionMod,
@@ -160,7 +160,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     Process.put({:sprites_get_script, FakeSpritesMod}, [{:error, :not_found}])
 
     assert %{teardown_verified: true, teardown_attempts: 1, warnings: nil} =
-             SpriteLifecycle.teardown(
+             Sprite.teardown(
                "sess-t1",
                sprite_name: "sprite-1",
                stop_mod: FakeAgentMod,
@@ -186,7 +186,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     Process.put({:sprites_destroy_script, FakeSpritesMod}, [:ok])
 
     assert %{teardown_verified: true, teardown_attempts: 1, warnings: nil} =
-             SpriteLifecycle.teardown(
+             Sprite.teardown(
                "sess-t2",
                sprite_name: "sprite-2",
                stop_mod: FakeAgentMod,
@@ -214,7 +214,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     ])
 
     result =
-      SpriteLifecycle.teardown(
+      Sprite.teardown(
         "sess-t3",
         sprite_name: "sprite-3",
         stop_mod: FakeAgentMod,
@@ -235,7 +235,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     Process.put(:sprite_agent_stop_result, :ok)
 
     result =
-      SpriteLifecycle.teardown(
+      Sprite.teardown(
         "sess-t4",
         sprite_name: nil,
         stop_mod: FakeAgentMod,
@@ -252,7 +252,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     Process.put(:sprite_agent_stop_result, :ok)
 
     result =
-      SpriteLifecycle.teardown(
+      Sprite.teardown(
         "sess-t5",
         sprite_name: "sprite-5",
         stop_mod: FakeAgentMod,
@@ -269,7 +269,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     Process.put(:sprite_agent_stop_result, :ok)
 
     result =
-      SpriteLifecycle.teardown(
+      Sprite.teardown(
         "sess-t6",
         sprite_name: "sprite-6",
         stop_mod: FakeAgentMod,
@@ -291,7 +291,7 @@ defmodule Jido.Shell.SpriteLifecycleTest do
     ])
 
     result =
-      SpriteLifecycle.teardown(
+      Sprite.teardown(
         "sess-t7",
         sprite_name: "sprite-7",
         stop_mod: FakeAgentMod,

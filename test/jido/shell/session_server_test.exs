@@ -3,6 +3,7 @@ defmodule Jido.Shell.ShellSessionServerTest do
 
   alias Jido.Shell.ShellSession
   alias Jido.Shell.ShellSessionServer
+
   @event_timeout 1_000
 
   describe "start_link/1" do
@@ -110,7 +111,7 @@ defmodule Jido.Shell.ShellSessionServerTest do
       assert MapSet.member?(state.transports, transport)
 
       Process.exit(transport, :kill)
-      Process.sleep(10)
+      wait_until_transport_removed(session_id, transport)
 
       {:ok, state} = ShellSessionServer.get_state(session_id)
       refute MapSet.member?(state.transports, transport)
@@ -277,6 +278,25 @@ defmodule Jido.Shell.ShellSessionServerTest do
 
       assert {:error, %Jido.Shell.Error{code: {:session, :not_found}}} =
                ShellSessionServer.get_state(session_id)
+    end
+  end
+
+  defp wait_until_transport_removed(session_id, transport, attempts \\ 100)
+  defp wait_until_transport_removed(_session_id, _transport, 0), do: :ok
+
+  defp wait_until_transport_removed(session_id, transport, attempts) do
+    case ShellSessionServer.get_state(session_id) do
+      {:ok, %{transports: transports}} ->
+        if MapSet.member?(transports, transport) do
+          Process.sleep(10)
+          wait_until_transport_removed(session_id, transport, attempts - 1)
+        else
+          :ok
+        end
+
+      _ ->
+        Process.sleep(10)
+        wait_until_transport_removed(session_id, transport, attempts - 1)
     end
   end
 end
