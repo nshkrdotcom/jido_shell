@@ -1,6 +1,6 @@
 defmodule Jido.Shell.VFS do
   @moduledoc """
-  Virtual File System for Kodo workspaces.
+  Virtual File System for Jido.Shell workspaces.
 
   Provides a unified filesystem API over multiple Jido.VFS adapters,
   with mount points routing operations to the appropriate backend.

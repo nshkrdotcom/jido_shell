@@ -1,6 +1,6 @@
 defmodule Jido.Shell.Error do
   @moduledoc """
-  Structured error for Kodo operations.
+  Structured error for Jido.Shell operations.
 
   Provides consistent error handling across VFS, shell, commands, and sessions.
   The code field uses category tuples for easy pattern matching.

@@ -1,6 +1,6 @@
-# Kodo Usage Rules for LLMs
+# Jido.Shell Usage Rules for LLMs
 
-This document provides guidance for LLMs using Kodo for file and shell operations.
+This document provides guidance for LLMs using Jido.Shell for file and shell operations.
 
 ## Quick Reference
 
@@ -8,49 +8,49 @@ This document provides guidance for LLMs using Kodo for file and shell operation
 
 ```elixir
 # Create a session with in-memory VFS
-{:ok, session} = Kodo.Agent.new(:my_workspace)
+{:ok, session} = Jido.Shell.Agent.new("my_workspace")
 ```
 
 ### Running Commands
 
 ```elixir
 # Synchronous command execution
-{:ok, output} = Kodo.Agent.run(session, "ls")
-{:ok, output} = Kodo.Agent.run(session, "pwd")
-{:ok, output} = Kodo.Agent.run(session, "cat /path/to/file")
+{:ok, output} = Jido.Shell.Agent.run(session, "ls")
+{:ok, output} = Jido.Shell.Agent.run(session, "pwd")
+{:ok, output} = Jido.Shell.Agent.run(session, "cat /path/to/file")
 
 # Multiple commands
-results = Kodo.Agent.run_all(session, ["mkdir /dir", "cd /dir", "pwd"])
+results = Jido.Shell.Agent.run_all(session, ["mkdir /dir", "cd /dir", "pwd"])
 ```
 
 ### File Operations
 
 ```elixir
 # Write files
-:ok = Kodo.Agent.write_file(session, "/path/to/file.txt", "content")
+:ok = Jido.Shell.Agent.write_file(session, "/path/to/file.txt", "content")
 
 # Read files
-{:ok, content} = Kodo.Agent.read_file(session, "/path/to/file.txt")
+{:ok, content} = Jido.Shell.Agent.read_file(session, "/path/to/file.txt")
 
 # List directory
-{:ok, entries} = Kodo.Agent.list_dir(session, "/path")
+{:ok, entries} = Jido.Shell.Agent.list_dir(session, "/path")
 ```
 
 ### Session State
 
 ```elixir
 # Get current directory
-cwd = Kodo.Agent.cwd(session)
+cwd = Jido.Shell.Agent.cwd(session)
 
 # Get full state
-{:ok, state} = Kodo.Agent.state(session)
+{:ok, state} = Jido.Shell.Agent.state(session)
 ```
 
 ### Cleanup
 
 ```elixir
 # Always stop sessions when done
-:ok = Kodo.Agent.stop(session)
+:ok = Jido.Shell.Agent.stop(session)
 ```
 
 ## Available Commands
@@ -80,9 +80,9 @@ cwd = Kodo.Agent.cwd(session)
 ## Error Handling
 
 ```elixir
-case Kodo.Agent.run(session, "cat /missing.txt") do
+case Jido.Shell.Agent.run(session, "cat /missing.txt") do
   {:ok, output} -> handle_output(output)
-  {:error, %Kodo.Error{code: {:vfs, :not_found}}} -> handle_missing()
+  {:error, %Jido.Shell.Error{code: {:vfs, :not_found}}} -> handle_missing()
   {:error, error} -> handle_error(error)
 end
 ```

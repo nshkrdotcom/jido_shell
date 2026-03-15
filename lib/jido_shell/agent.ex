@@ -1,6 +1,6 @@
 defmodule Jido.Shell.Agent do
   @moduledoc """
-  Agent-friendly API for Kodo sessions.
+  Agent-friendly API for Jido.Shell sessions.
 
   This module provides a simple, synchronous API suitable for
   Jido agents and other programmatic access patterns.
